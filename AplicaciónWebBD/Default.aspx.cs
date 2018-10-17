@@ -11,6 +11,7 @@ public partial class _Default : System.Web.UI.Page {
   //Variables de clase.
   GestorBD.GestorBD GestorBD;
   DataSet DsGeneral = new DataSet();
+    DataRow Fila;
   string cadSql;
 
   //Acciones iniciales.
@@ -27,15 +28,20 @@ public partial class _Default : System.Web.UI.Page {
 
   //Verifica que el usuario exista.
   protected void Login1_Authenticate(object sender, AuthenticateEventArgs e) {
-
+    string tipo;
     GestorBD = (GestorBD.GestorBD)Session["GestorBD"];  //Recupera la conexión a la BD.
     cadSql = "select * from PCUsuarios where RFC='" + Login1.UserName +
       "' and Passw='" + Login1.Password + "'";
     GestorBD.consBD(cadSql, DsGeneral, "Usuario");
     //Verifica si el usuario existe en la BD.
     if (DsGeneral.Tables["Usuario"].Rows.Count != 0) {
-      Session["rfc"] = Login1.UserName;     //Sí, guarda el RFC del usuario.
-      Server.Transfer("AdminUsuarios.aspx");
+      Session["rfc"] = Login1.UserName;     //Si existe, guarda el RFC del usuario.
+      Fila = DsGeneral.Tables["Usuario"].Rows[0];
+      tipo = Fila["Tipo"].ToString();
+      if (tipo == "Emp")
+          Server.Transfer("MenuOpciones.aspx");
+      else
+          Server.Transfer("ListaPedidos.aspx");
     }
   }
 }
