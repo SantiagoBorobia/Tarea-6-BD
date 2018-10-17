@@ -26,9 +26,9 @@ public partial class AltaPagos : System.Web.UI.Page
             GestorBD = (GestorBD.GestorBD)Session["GestorBD"];
             rfc = Session["rfc"].ToString();
 
-            //Lee los datos de los pedidos que ha hecho el empleado
-            //y carga los Nombres de los clientes en el DDL.
-            cadSql = "select Nombre from PCUsuarios where RFC in (select RFCC from PCPedidos p where p.RFCE='" + rfc + "'";
+      //Lee los datos de los pedidos que ha hecho el empleado
+      //y carga los Nombres de los clientes en el DDL.
+            cadSql = "select Nombre from PCUsuarios where RFC in (select RFCC from PCPedidos p where p.RFCE='" + rfc + "')";
             GestorBD.consBD(cadSql, DsPedidos, "Clientes");
             común.cargaDDL(DDLNombres, DsPedidos, "Clientes", "Nombre");
             Session["DsPedidos"] = DsPedidos;
@@ -42,7 +42,8 @@ public partial class AltaPagos : System.Web.UI.Page
         GestorBD = (GestorBD.GestorBD)Session["GestorBD"];
         //Lee los datos de los pedidos que ha hecho el empleado
         //y carga los Nombres de los clientes en el DDL.
-        cadSql = "select FolioP from PCPedidos where RFCC=(select RFC from PCUsuarios where nombre='"+DDLNombres.SelectedValue+"')";
+        cadSql = "select FolioP from PCPedidos where RFCC=(select RFC from PCUsuarios where nombre='"+DDLNombres.Text+"')";
+        Response.Write("Cadena:" + DDLNombres.Text);
         GestorBD.consBD(cadSql, Dsgeneral, "Folios");
         común.cargaDDL(DropDownList2, Dsgeneral, "Folios", "FolioP");
     }
@@ -56,7 +57,7 @@ public partial class AltaPagos : System.Web.UI.Page
         GVPagos.Visible = true;
 
         //obtiene la informacion del pedido seleccionado y llena la tabla y el grid view
-        cadSql = "select fechaPed, monto, saldocli, saldofacs from PCPedidos where folioP='" + DropDownList2.SelectedValue + "'";
+        cadSql = "select fechaPed, monto, saldocli, saldofacs from PCPedidos where folioP=" + DropDownList2.SelectedValue + "";
         GestorBD.consBD(cadSql, DsPagos, "InfoPed");
         Fila = DsPagos.Tables["InfoPed"].Rows[0];
         TblPagos.Rows[1].Cells[0].Text = Fila["FechaPed"].ToString();
@@ -75,7 +76,7 @@ public partial class AltaPagos : System.Web.UI.Page
     protected void BtModi_Click(object sender, EventArgs e)
     {
         BtBajaP.Visible = true;
-        BtModi.Visible = true;
+        BtAltaPago.Visible = true;
         BtModP.Visible = true;
     }
 
@@ -85,7 +86,13 @@ public partial class AltaPagos : System.Web.UI.Page
         GestorBD = (GestorBD.GestorBD)Session["GestorBD"];
         DDLBaja.Visible = true;
         BtEjecutarBaja.Visible = true;
-        cadSql = "Select * from PCPagos where FolioP = '" + DropDownList2.SelectedValue + "'";
+        LbAlta.Visible = false;
+        TxBMonto.Visible = false;
+        BtEjecutarAlta.Visible = false;
+        DDLModi.Visible = false;
+        TxBModi.Visible = false;
+        BtnRegistrarModi.Visible = false;
+        cadSql = "Select * from PCPagos where FolioP = " + DropDownList2.SelectedValue + "";
         GestorBD.consBD(cadSql, DsPag, "Pagos");
         común.cargaDDL(DDLBaja, DsPag, "Pagos", "IdPago");
     }
@@ -99,7 +106,10 @@ public partial class AltaPagos : System.Web.UI.Page
             Response.Write("Eliminación exitosa en Usuarios");
         else
             Response.Write("Error de eliminación del Pago");
-    }
+
+      DDLBaja.Visible = false;
+      BtEjecutarBaja.Visible = false;
+  }
 
     protected void BtAltaPago_Click(object sender, EventArgs e)
     {
@@ -107,21 +117,57 @@ public partial class AltaPagos : System.Web.UI.Page
         LbAlta.Visible = true;
         TxBMonto.Visible = true;
         BtEjecutarAlta.Visible = true;
-        //Genera un Id para el nuevo pago
-        cadSql = "select max(IdPago) into MId from PCPagos";
-        GestorBD.consBD(cadSql, DsPag, "MaxId");
-        int idtemp;
-        Fila = DsPag.Tables["MaxiD"].Rows[0];
-        idtemp = (int)Fila["MId"];
-        idtemp = idtemp + 1;
+        DDLBaja.Visible = false;
+        BtEjecutarBaja.Visible = false;
+        DDLModi.Visible = false;
+        TxBModi.Visible = false;
+        BtnRegistrarModi.Visible = false;
 
-        //Crear el pago
-        string mon = TxBMonto.Text;
-        cadSql = "Insert into PCPagos values ('" + DropDownList2.SelectedValue + "', " + idtemp + ", " + DateTime.Now.ToString() +", "+ mon +")";
-        if (GestorBD.altaBD(cadSql) == OK)
-            Response.Write("Pago dado de Alta");
-        else
-            Response.Write("No se pudo dar de alta el pago");
+  }
 
-    }
+  protected void BtEjecutarAlta_Click(object sender, EventArgs e) {
+    //Genera un Id para el nuevo pago
+    cadSql = "select max(IdPago) into MId from PCPagos";
+    GestorBD.consBD(cadSql, DsPag, "MaxId");
+    int idtemp;
+    Fila = DsPag.Tables["MaxiD"].Rows[0];
+    idtemp = (int)Fila["MId"];
+    idtemp = idtemp + 1;
+
+    //Crear el pago
+    string mon = TxBMonto.Text;
+    cadSql = "Insert into PCPagos values (" + DropDownList2.SelectedValue + ", " + idtemp + ", " + DateTime.Now.ToString() + ", " + mon + ")";
+    if (GestorBD.altaBD(cadSql) == OK)
+      Response.Write("Pago dado de Alta");
+    else
+      Response.Write("No se pudo dar de alta el pago");
+
+    LbAlta.Visible = false;
+    TxBMonto.Visible = false;
+    BtEjecutarAlta.Visible = false;
+  }
+
+  protected void BtModP_Click(object sender, EventArgs e) {
+    GestorBD = (GestorBD.GestorBD)Session["GestorBD"];
+    DDLBaja.Visible = true;
+    DDLModi.Visible = true;
+    TxBModi.Visible = true;
+    BtnRegistrarModi.Visible = true;
+    BtEjecutarBaja.Visible = false;
+    LbAlta.Visible = false;
+    TxBMonto.Visible = false;
+    BtEjecutarAlta.Visible = false;
+    BtEjecutarBaja.Visible = false;
+
+    //Llena el DDL con los id de los pagos
+    cadSql = "Select * from PCPagos where FolioP = " + DropDownList2.SelectedValue + "";
+    GestorBD.consBD(cadSql, DsPag, "Pagos");
+    común.cargaDDL(DDLBaja, DsPag, "Pagos", "IdPago");
+
+    cadSql = "Update PCPagos set '" + DDLModi.SelectedValue + "' = '" + TxBModi.Text + "' where IdPago = " + DDLBaja.SelectedValue + "";
+    if (GestorBD.cambiaBD(cadSql) == OK)
+      Response.Write("Se ha realizado la modificación");
+    else
+      Response.Write("No se pudo realizar la modificación");
+  }
 }

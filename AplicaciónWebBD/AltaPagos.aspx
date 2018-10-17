@@ -41,15 +41,21 @@
         <asp:GridView ID="GVPagos" runat="server" style="z-index: 1; left: 487px; top: 218px; position: absolute; height: 133px; width: 474px" Visible="False">
         </asp:GridView>
         <asp:Button ID="BtModi" runat="server" OnClick="BtModi_Click" style="z-index: 1; left: 76px; top: 220px; position: absolute" Text="Modificaciones" />
-        <asp:DropDownList ID="DDLBaja" runat="server" style="z-index: 1; left: 71px; top: 329px; position: absolute; margin-bottom: 0px">
+        <asp:DropDownList ID="DDLBaja" runat="server" style="z-index: 1; left: 71px; top: 329px; position: absolute; margin-bottom: 0px" Visible="False">
         </asp:DropDownList>
         <asp:Button ID="BtBajaP" runat="server" OnClick="BtBajaP_Click" style="z-index: 1; left: 74px; top: 270px; position: absolute; width: 90px" Text="Baja Pago" Visible="False" />
         <asp:Button ID="BtEjecutarBaja" runat="server" OnClick="BtEjecutarBaja_Click" style="z-index: 1; left: 193px; top: 327px; position: absolute; width: 87px" Text="Dar de Baja" Visible="False" />
         <asp:Button ID="BtAltaPago" runat="server" OnClick="BtAltaPago_Click" style="z-index: 1; left: 192px; top: 271px; position: absolute" Text="Alta Pago" Visible="False" />
-        <asp:Button ID="BtModP" runat="server" style="z-index: 1; left: 304px; top: 273px; position: absolute; width: 97px" Text="Modificar Pago" Visible="False" />
+        <asp:Button ID="BtModP" runat="server" style="z-index: 1; left: 304px; top: 273px; position: absolute; width: 97px" Text="Modificar Pago" Visible="False" OnClick="BtModP_Click" />
         <asp:Label ID="LbAlta" runat="server" style="z-index: 1; left: 74px; top: 338px; position: absolute" Text="Monto" Visible="False"></asp:Label>
         <asp:TextBox ID="TxBMonto" runat="server" style="z-index: 1; left: 183px; top: 335px; position: absolute" Visible="False"></asp:TextBox>
-        <asp:Button ID="BtEjecutarAlta" runat="server" style="z-index: 1; left: 333px; top: 333px; position: absolute" Text="Ejecutar Alta" Visible="False" />
+        <asp:DropDownList ID="DDLModi" runat="server" style="z-index: 1; left: 184px; top: 326px; position: absolute" Visible="False">
+            <asp:ListItem>Monto</asp:ListItem>
+            <asp:ListItem>Fecha</asp:ListItem>
+        </asp:DropDownList>
+        <asp:TextBox ID="TxBModi" runat="server" style="z-index: 1; left: 269px; top: 327px; position: absolute" Visible="False"></asp:TextBox>
+        <asp:Button ID="BtnRegistrarModi" runat="server" style="z-index: 1; left: 284px; top: 378px; position: absolute" Text="Realizar Modificación" Visible="False" />
+        <asp:Button ID="BtEjecutarAlta" runat="server" style="z-index: 1; left: 287px; top: 379px; position: absolute" Text="Ejecutar Alta" Visible="False" OnClick="BtEjecutarAlta_Click" />
     
     </div>
     </form>
