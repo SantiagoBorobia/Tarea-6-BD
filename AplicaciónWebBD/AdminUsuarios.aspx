@@ -17,7 +17,7 @@
     <div style="background-color: #FFCC99; height: 462px; z-index: 1; left: 33px; top: 34px; position: absolute; width: 967px;">
     
         <asp:Label ID="Label1" runat="server" Font-Bold="True" Font-Size="Large" style="z-index: 1; left: 226px; top: 34px; position: absolute; width: 220px" Text="Administración de usuarios"></asp:Label>
-        <asp:Button ID="BtnAlta" runat="server" style="z-index: 1; left: 69px; top: 81px; position: absolute; bottom: 432px;" Text="Alta de usuarios" OnClick="BtnAlta_Click" />
+        <asp:Button ID="BtnAlta" runat="server" style="z-index: 1; left: 69px; top: 81px; position: absolute; bottom: 362px; width: 142px;" Text="Alta de usuarios" OnClick="BtnAlta_Click" />
         <asp:Button ID="BtnBaja" runat="server" style="z-index: 1; left: 267px; top: 81px; position: absolute" Text="Baja de usuarios" OnClick="BtnBaja_Click" />
         <asp:Button ID="BtnCambio" runat="server" style="z-index: 1; left: 465px; top: 80px; position: absolute" Text="Cambio de datos" />
         <asp:TextBox ID="TxtRFC" runat="server" style="z-index: 1; left: 75px; top: 150px; position: absolute" Visible="False" ToolTip="RFC" OnTextChanged="TxtRFC_TextChanged">RFC</asp:TextBox>
