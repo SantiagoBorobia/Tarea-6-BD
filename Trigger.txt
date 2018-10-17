@@ -1,0 +1,15 @@
+create or replace trigger creaFactura 
+after insert on PCPagos
+for each row  
+ declare nfolio int; nsaldo real; saldo real;
+  begin
+      select max (FolioF) into nfolio from PCFacturas;
+      nfolio := nfolio +1; 
+      insert into PCFacturas values (nfolio, sysdate, :new.Monto, :new.FolioP );
+      select saldoCli into nsaldo from PCPedidos where FolioP = :new.FolioP;
+      nsaldo := nsaldo - :new.Monto;
+      update PCPedidos set saldoCLi = nsaldo where FolioP = :new.FolioP; 
+      select saldoFacs into saldo from PCPedidos where FolioP = :new.FolioP;
+      saldo := saldo + :new.Monto;
+      update PCPedidos set saldoFacs = saldo where FolioP = :new.FolioP; 
+  end;
