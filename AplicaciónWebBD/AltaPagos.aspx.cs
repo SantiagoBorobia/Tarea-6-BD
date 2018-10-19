@@ -22,6 +22,7 @@ public partial class AltaPagos : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            Label3.Text = DateTime.Today.ToString();
             //Recupera valores de Session.
             GestorBD = (GestorBD.GestorBD)Session["GestorBD"];
             rfc = Session["rfc"].ToString();
@@ -39,8 +40,7 @@ public partial class AltaPagos : System.Web.UI.Page
 
     protected void DDLNombres_SelectedIndexChanged(object sender, EventArgs e)
     {
-        LbClave.Visible = true;
-        DropDownList2.Visible = true;
+        
         
         GestorBD = (GestorBD.GestorBD)Session["GestorBD"];
         //Lee los datos de los pedidos que ha hecho el empleado
@@ -49,6 +49,26 @@ public partial class AltaPagos : System.Web.UI.Page
         Response.Write("Cadena:" + DDLNombres.Text);
         GestorBD.consBD(cadSql, Dsgeneral, "Folios");
         común.cargaDDL(DropDownList2, Dsgeneral, "Folios", "FolioP");
+
+    //Muestra/Oculta controles
+    LbClave.Visible = true;
+    DropDownList2.Visible = true;
+    BtAltaPago.Visible = false;
+    BtBajaP.Visible = false;
+    BtEjecutarAlta.Visible = false;
+    BtEjecutarBaja.Visible = false;
+    BtModi.Visible = false;
+    BtModP.Visible = false;
+    BtnRegistrarModi.Visible = false;
+    Label4.Visible = false;
+    DDLBaja.Visible = false;
+    DDLModi.Visible = false;
+    TxBModi.Visible = false;
+    TxBMonto.Visible = false;
+    GVPagos.Visible = false;
+    TblPagos.Visible = false;
+    
+
     }
 
     protected void DropDownList2_SelectedIndexChanged(object sender, EventArgs e)
@@ -73,7 +93,7 @@ public partial class AltaPagos : System.Web.UI.Page
         TblPagos.Rows[1].Cells[3].Text = Fila["SaldoCli"].ToString();
 
   
-        cadSql = "select IdPago, Fecha, Monto from PCPagos where FolioP = '" + DropDownList2.Text + "'";
+        cadSql = "select distinct IdPago, Fecha, Monto from PCPagos where FolioP = " + DropDownList2.Text ;
         GestorBD.consBD(cadSql, DsPag, "PagosPed");
         GVPagos.DataSource = DsPag.Tables["PagosPed"];  //Muestra resultados.
         GVPagos.DataBind();
@@ -160,17 +180,18 @@ public partial class AltaPagos : System.Web.UI.Page
 
   protected void BtEjecutarAlta_Click(object sender, EventArgs e)
     {
+        GestorBD = (GestorBD.GestorBD)Session["GestorBD"];
         //Genera un Id para el nuevo pago
-        cadSql = "select max(IdPago) into MId from PCPagos";
+        cadSql = "select max(IdPago) from PCPagos where folioP="+DropDownList2.Text;
         GestorBD.consBD(cadSql, DsPag, "MaxId");
         int idtemp;
-        Fila = DsPag.Tables["MaxiD"].Rows[0];
-        idtemp = (int)Fila["MId"];
+        Fila = DsPag.Tables["MaxId"].Rows[0];
+        idtemp =  int.Parse(Fila["max(IdPago)"].ToString());
         idtemp = idtemp + 1;
 
         //Crea el pago y lo inserta
         string mon = TxBMonto.Text;
-        cadSql = "Insert into PCPagos values (" + DropDownList2.Text + ", " + idtemp + ", " + DateTime.Now.ToString() + ", " + mon + ")";
+        cadSql = "Insert into PCPagos values (" + DropDownList2.Text + ", " + idtemp + ", '" + DateTime.Today.ToString() + "', " + mon + ")";
         if (GestorBD.altaBD(cadSql) == OK)
           Response.Write("Pago dado de Alta");
         else
@@ -217,7 +238,7 @@ public partial class AltaPagos : System.Web.UI.Page
         Label4.Visible = true;
 
         //Llena el DDL con los id de los pagos
-        cadSql = "Select * from PCPagos where FolioP = " + DropDownList2.SelectedValue + "";
+        cadSql = "Select * from PCPagos where FolioP = " + DropDownList2.Text + "";
         GestorBD.consBD(cadSql, DsPag, "Pagos");
         común.cargaDDL(DDLBaja, DsPag, "Pagos", "IdPago");
 
@@ -232,7 +253,7 @@ public partial class AltaPagos : System.Web.UI.Page
 
         GestorBD = (GestorBD.GestorBD)Session["GestorBD"];
 
-        cadSql = "Update PCPagos set '" + DDLModi.Text + "' = '" + TxBModi.Text + "' where IdPago = " + DDLBaja.SelectedValue + "";
+        cadSql = "Update PCPagos set '" + DDLModi.Text + "' = '" + TxBModi.Text + "' where IdPago = " + DDLBaja.Text + "";
         if (GestorBD.cambiaBD(cadSql) == OK)
             Response.Write("Se ha realizado la modificación");
         else

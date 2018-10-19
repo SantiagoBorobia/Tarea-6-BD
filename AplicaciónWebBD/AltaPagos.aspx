@@ -40,7 +40,7 @@
     
         <asp:GridView ID="GVPagos" runat="server" style="z-index: 1; left: 487px; top: 218px; position: absolute; height: 133px; width: 474px" Visible="False">
         </asp:GridView>
-        <asp:Button ID="BtModi" runat="server" OnClick="BtModi_Click" style="z-index: 1; left: 76px; top: 220px; position: absolute" Text="Modificaciones" />
+        <asp:Button ID="BtModi" runat="server" OnClick="BtModi_Click" style="z-index: 1; left: 76px; top: 220px; position: absolute" Text="Operaciones" />
         <asp:DropDownList ID="DDLBaja" runat="server" style="z-index: 1; left: 132px; top: 313px; position: absolute; margin-bottom: 0px" Visible="False">
         </asp:DropDownList>
         <asp:Button ID="BtBajaP" runat="server" OnClick="BtBajaP_Click" style="z-index: 1; left: 74px; top: 270px; position: absolute; width: 90px" Text="Baja Pago" Visible="False" />
@@ -55,7 +55,7 @@
         <asp:Label ID="Label3" runat="server" style="font-weight: 700; z-index: 1; left: 205px; top: 58px; position: absolute" Text="Label"></asp:Label>
         <asp:TextBox ID="TxBMonto" runat="server" style="z-index: 1; left: 136px; top: 387px; position: absolute" Visible="False"></asp:TextBox>
         <asp:TextBox ID="TxBModi" runat="server" style="z-index: 1; left: 150px; top: 343px; position: absolute" Visible="False"></asp:TextBox>
-        <asp:Label ID="Label4" runat="server" style="z-index: 1; left: 78px; top: 314px; position: absolute" Text="IdPago:"></asp:Label>
+        <asp:Label ID="Label4" runat="server" style="z-index: 1; left: 78px; top: 314px; position: absolute" Text="IdPago:" Visible="False"></asp:Label>
         <asp:DropDownList ID="DDLModi" runat="server" style="z-index: 1; left: 77px; top: 342px; position: absolute" Visible="False">
             <asp:ListItem>Monto</asp:ListItem>
             <asp:ListItem>Fecha</asp:ListItem>
